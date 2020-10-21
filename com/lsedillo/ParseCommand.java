@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class ParseCommand {
 
     public static String chooseMethod(String line) {
-        String[] tokens = line.split(" ");
+        String[] tokens = line.toLowerCase().split(" ");
         if (tokens[0].equals("calculate")) return calculate(Arrays.copyOfRange(tokens, 1, tokens.length));
         if (tokens[0].equals("convert")) return convert(Arrays.copyOfRange(tokens,1,tokens.length));
         else return "Invalid instruction.";

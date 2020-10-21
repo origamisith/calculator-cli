@@ -37,7 +37,7 @@ public class Calculator {
                     while(file.hasNext()) {
                         String line = file.nextLine();
                         if(!line.startsWith("//"))
-                            System.out.println(line + ": " + ANSI_GREEN + ParseCommand.chooseMethod(line.toLowerCase())+ ANSI_RESET);
+                            System.out.println(line + ": " + ANSI_GREEN + ParseCommand.chooseMethod(line)+ ANSI_RESET);
                     }
                 } catch( IOException e) {
                     System.out.println(ANSI_RED + "File does not exist: " + e + ANSI_RESET);
