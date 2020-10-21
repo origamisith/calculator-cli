@@ -4,17 +4,30 @@ public class Bandwidth {
     private DataUnits data;
     private TimeUnits time;
 
-    public Bandwidth(DataUnits data, TimeUnits time) {
-        this.data = data;
-        this.time = time;
-    }
-
+    /**
+     * Calculates the download / upload time for a file given the following parameters:
+     * @param n1 The number of bytes of the file
+     * @param fileUnit The unit of measure of the file.
+     * @param n2 The size of the bandwidth
+     * @param bandwidthUnit The unit with which the bandwidth size is measured
+     * @return The time required to download or upload the given file for the given bandwidth
+     */
     public static String downUpTime(double n1, DataUnits fileUnit, double n2, DataUnits bandwidthUnit) {
         double bits = DataUnits.convert(n1, fileUnit, DataUnits.BITS);
         double bits2 = DataUnits.convert(n2, bandwidthUnit, DataUnits.BITS);
         return TimeUnits.readableTime((bits) / bits2);
     }
 
+    /**
+     * Calculates the bandwidth required for a website given the following parameters:
+     * @param views The average number of views for the specified time period
+     * @param time The time period over which the views are specified.
+     * @param pageSize The average page size, measured in a specified unit of measure
+     * @param sizeUnit The unit with which the page size is measured
+     * @param redundancy A multiplier. If a redundancy of 2 is specified, the required bandwidth
+     *                   will be doubled.
+     * @return The bandwidth required, measured in Mbit/s and GB/mo
+     */
     public static String webBandwidth(double views, TimeUnits time, double pageSize, DataUnits sizeUnit, double redundancy) {
         double seconds = TimeUnits.convert(time, TimeUnits.SECOND);
         double months = TimeUnits.convert(time, TimeUnits.MONTH);
@@ -22,11 +35,24 @@ public class Bandwidth {
         double gigabytes = DataUnits.convert(pageSize, sizeUnit, DataUnits.GIGABYTES);
         String result = "Actual bandwidth need is " + (views * megabits / seconds) + " Mbits/s or "
                 + (views * gigabytes / months) + "GB per month";
-        result += "\nWith redundancy factor of 2, the bandwidth need is " + (views * megabits * redundancy) / seconds + "Mbits/s or" +
+        result += "\nWith redundancy factor of "+ redundancy + ", the bandwidth need is " + (views * megabits * redundancy) / seconds + "Mbits/s or" +
                 (views * gigabytes * redundancy) / months + " GB per month";
         return result;
     }
 
+    /**
+     * Converts between monthly usage and bandwidth. To calculate bandwidth, specify the amount of
+     * bandwidth as -1. To calculate monthly usage, specify the amount of monthly usage as -1.
+     * Otherwise, the program will throw an error.
+     * @param dataSize The amount of monthly data usage. Must specify as -1 if trying to calculate
+     *                 monthly data usage from bandwidth.
+     * @param dataUnit The unit with which the data is measured. Always specify this
+     * @param bandSize The amount of bandwidth. Must specify as -1 if trying to calculate bandwidth
+     *                 from monthly data usage
+     * @param bandwidthUnit The unit with which bandwidth is measured. Always specify this.
+     * @return Either the amount of monthly data usage given a bandwidth, or the amount of bandwidth
+     * given a monthly usage.
+     */
     public static String hostBandwidth(double dataSize, DataUnits dataUnit, double bandSize, DataUnits bandwidthUnit) {
         if (bandSize == -1) {
             double newData = DataUnits.convert(dataSize, dataUnit, bandwidthUnit);

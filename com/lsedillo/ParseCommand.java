@@ -3,7 +3,14 @@ package com.lsedillo;
 import java.util.Arrays;
 
 public class ParseCommand {
-
+    /**
+     * This method takes a line of input, converts it to lowercase, and sends it to either the <code>calculate</code>
+     * method or the <code>convert</code> method depending on the first word of the line. However, when it passes
+     * along the line of input, it trims off the first word since it is no longer needed
+     * @param line The line of user input
+     * @return The result from the <code>calculate</code> or <code>convert</code> method, which will be the result of
+     * the calculation
+     */
     public static String chooseMethod(String line) {
         String[] tokens = line.toLowerCase().split(" ");
         if (tokens[0].equals("calculate")) return calculate(Arrays.copyOfRange(tokens, 1, tokens.length));
@@ -11,6 +18,15 @@ public class ParseCommand {
         else return "Invalid instruction.";
     }
 
+    /**
+     * This method takes in the trimmed line of user input, and, depending on the second word of input, decides
+     * which specific logic to invoke. For the +,-,*,/ types of methods, the binary numbers are converted to Decimal
+     * objects, the operation is performed yielding a Decimal answer, and then that Decimal answer is converted back
+     * to binary. For the other methods, the raw string tokens are processed to their correct values
+     * to be passed into the appropriate methods.
+     * @param tokens
+     * @return
+     */
     private static String calculate(String[] tokens) {
         return switch (tokens[0]) {
             case "binary" -> {

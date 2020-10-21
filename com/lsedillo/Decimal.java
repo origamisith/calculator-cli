@@ -50,4 +50,10 @@ public class Decimal {
     public String toString() {
         return "" + value;
     }
+
+    public static void main(String[] args) {
+        Decimal d = new Decimal(2123923824);
+        System.out.println(d.toBinary());
+        System.out.println(Long.toBinaryString(d.value));
+    }
 }
