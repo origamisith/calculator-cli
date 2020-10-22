@@ -113,7 +113,7 @@ public class ParseCommand {
                 //As my enum is stored in the abbreviated form for the "bit" data units (kbits, gbits, tbits),
                 //I use this to trim the input such that kilobit -> kbits, gigabits -> gbits, and so on.
                 if(tokens[3].indexOf('y') < 0) {
-                    unitsString = tokens[3].charAt(0) + tokens[3].substring(tokens[3].indexOf('b')) + "s";
+                    unitsString = tokens[3].charAt(0) + tokens[3].substring(tokens[3].indexOf('b'), tokens[3].indexOf('s')) + "s";
                 }
                 else unitsString = tokens[3];
                 DataUnits dataUnit = DataUnits.valueOf(unitsString.toUpperCase());
