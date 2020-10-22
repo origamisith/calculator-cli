@@ -2,6 +2,9 @@ package com.lsedillo;
 
 import java.util.Arrays;
 
+/**
+ * Responsible for parsing the raw user input and calling the appropriate methods.
+ */
 public class ParseCommand {
     /**
      * This method takes a line of input, converts it to lowercase, and sends it to either the <code>calculate</code>
@@ -23,9 +26,10 @@ public class ParseCommand {
      * which specific logic to invoke. For the +,-,*,/ types of methods, the binary numbers are converted to Decimal
      * objects, the operation is performed yielding a Decimal answer, and then that Decimal answer is converted back
      * to binary. For the other methods, the raw string tokens are processed to their correct values
-     * to be passed into the appropriate methods.
-     * @param tokens
-     * @return
+     * to be passed into the appropriate methods. Some of the processing involves converting the standard names
+     * for data / time units into the enum names.
+     * @param tokens The tokenized user input, minus the first token
+     * @return The result from whatever method is called.
      */
     private static String calculate(String[] tokens) {
         return switch (tokens[0]) {
@@ -67,6 +71,7 @@ public class ParseCommand {
                 double time = Double.parseDouble(tokens[2]);
                 DataUnits dataUnit1 = DataUnits.valueOf(tokens[3].toUpperCase());
                 double bandwidth = Double.parseDouble(tokens[4]);
+                //Trimming off the "/s" from the bandwidth unit
                 String dataUnitString = tokens[5].substring(0, tokens[5].indexOf('/'))+ "s";
                 DataUnits dataUnit2 = DataUnits.valueOf(dataUnitString.toUpperCase());
                 yield Bandwidth.downUpTime(time, dataUnit1, bandwidth, dataUnit2);
@@ -87,6 +92,11 @@ public class ParseCommand {
         };
     }
 
+    /**
+     * Handles conversion for binary, hexadecimal, and decimal, data, monthly usage, and bandwidth.
+     * @param tokens The rest of the tokens passed down from the parent method
+     * @return The result from whichever method is called.
+     */
     private static String convert(String[] tokens) {
         return switch(tokens[0]) {
             case  "binary" -> (new Binary(tokens[3])).toDecimal().toString();
@@ -99,18 +109,22 @@ public class ParseCommand {
             case "data" -> {
                 Double dataAmount = Double.parseDouble(tokens[4]);
                 String unitsString;
+                //If the data type doesn't include bytes (doesn't have a 'y' in it), then it must include bits.
+                //As my enum is stored in the abbreviated form for the "bit" data units (kbits, gbits, tbits),
+                //I use this to trim the input such that kilobit -> kbits, gigabits -> gbits, and so on.
                 if(tokens[3].indexOf('y') < 0) {
-                    unitsString = tokens[3].substring(0, 1) + tokens[3].substring(tokens[3].indexOf('b')) + "s";
+                    unitsString = tokens[3].charAt(0) + tokens[3].substring(tokens[3].indexOf('b')) + "s";
                 }
                 else unitsString = tokens[3];
                 DataUnits dataUnit = DataUnits.valueOf(unitsString.toUpperCase());
-                double result  = DataUnits.convert(Double.parseDouble(tokens[4]), DataUnits.BITS, dataUnit);
+                double result  = DataUnits.convert(dataAmount, DataUnits.BITS, dataUnit);
                 yield result + " " + dataUnit.name;
             }
             case "monthly" -> {
                 double dataSize = Double.parseDouble(tokens[4]);
                 DataUnits dataUnit = DataUnits.valueOf(tokens[5].toUpperCase());
                 double bandwidthSize = Double.parseDouble(tokens[6]);
+                //Removing the "/s" and replacing it with "S" for my bandwidth unit
                 DataUnits bandwidthUnit = DataUnits.valueOf(tokens[7].substring(0, tokens[7].indexOf('/')).toUpperCase()+ "S");
                 yield Bandwidth.hostBandwidth(dataSize,dataUnit,bandwidthSize,bandwidthUnit);
             }

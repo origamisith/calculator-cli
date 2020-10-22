@@ -1,8 +1,9 @@
 package com.lsedillo;
 
+/**
+ *Responsible for calculations that involve bandwidth. Makes heavy use of my unit and number base classes.
+ */
 public class Bandwidth {
-    private DataUnits data;
-    private TimeUnits time;
 
     /**
      * Calculates the download / upload time for a file given the following parameters:
@@ -70,19 +71,11 @@ public class Bandwidth {
         return "Please specify either the monthly usage or the bandwidth as -1";
     }
 
-    public DataUnits getData() {
-        return data;
-    }
 
-    public TimeUnits getTime() {
-        return time;
-    }
-
-
-    public static void main(String[] args) {
-        System.out.println(downUpTime(500, DataUnits.MEGABYTES, 5, DataUnits.MBITS));
-        System.out.println(webBandwidth(455, TimeUnits.HOUR, 10, DataUnits.MEGABYTES, 3));
-        System.out.println(hostBandwidth(-1, DataUnits.MEGABYTES, 8, DataUnits.KBITS));
-
-    }
+//    public static void main(String[] args) {
+//        System.out.println(downUpTime(500, DataUnits.MEGABYTES, 5, DataUnits.MBITS));
+//        System.out.println(webBandwidth(455, TimeUnits.HOUR, 10, DataUnits.MEGABYTES, 3));
+//        System.out.println(hostBandwidth(-1, DataUnits.MEGABYTES, 8, DataUnits.KBITS));
+//
+//    }
 }

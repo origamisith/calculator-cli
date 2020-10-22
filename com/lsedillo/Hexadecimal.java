@@ -2,11 +2,20 @@ package com.lsedillo;
 
 import java.util.ArrayList;
 
+/**
+ * Stores hexadecimal values as an arraylist of bytes and is responsible for converting to
+ * decimal
+ */
 public class Hexadecimal {
-    private ArrayList<Byte> digits;
-    private int length;
+    private final ArrayList<Byte> digits;
+    private final int length;
     private String digitsString;
 
+    /**
+     * Constructor that takes a string and converts it to an ArrayList of Bytes
+     *
+     * @param digitsString The string gathered from user input
+     */
     public Hexadecimal(String digitsString) {
         length = digitsString.length();
         digits = new ArrayList<>(length);
@@ -14,19 +23,21 @@ public class Hexadecimal {
         makeDigits();
     }
 
+    /**
+     * Constructor that takes an ArrayList of Bytes
+     *
+     * @param digits an ArrayList of Bytes
+     */
     public Hexadecimal(ArrayList<Byte> digits) {
         this.digits = digits;
         length = digits.size();
         makeDigitsString();
     }
 
-    public static void main(String[] args) {
-        Hexadecimal hex = new Hexadecimal("FFFF");
-        Decimal dec = new Decimal("1");
-        System.out.println(hex);
-        System.out.println(hex.toDecimal());
-        System.out.println(dec.toHexadecimal());
-    }
+    /**
+     * Changes the arraylist of bytes (which stores each digit in base 10) to a string
+     * representing the number in base 16 with 1-9 and A-F
+     */
 
     private void makeDigitsString() {
         char[] result = new char[length];
@@ -47,6 +58,10 @@ public class Hexadecimal {
         digitsString = new String(result);
     }
 
+    /**
+     * Converts a string representation of a hexadecimal number to a representation
+     * where a decimal number stores each digit.
+     */
     private void makeDigits() {
         for (int i = length - 1; i >= 0; i--) {
             String digitString = digitsString.substring(i, i + 1);
@@ -64,6 +79,10 @@ public class Hexadecimal {
         }
     }
 
+    /**
+     * Convert to decimal, adding up a total based on the value and place of the hex digit
+     * @return A Decimal object
+     */
     public Decimal toDecimal() {
         long result = 0;
         for (int i = 0; i < length; i++) {
@@ -72,8 +91,19 @@ public class Hexadecimal {
         return new Decimal(result);
     }
 
+    /**
+     * Simple toString, based on the traditional 1-9, A-F representation
+     * @return A hex string
+     */
     public String toString() {
         return digitsString.toUpperCase();
     }
+//    public static void main(String[] args) {
+//        Hexadecimal hex = new Hexadecimal("FFFF");
+//        Decimal dec = new Decimal("1");
+//        System.out.println(hex);
+//        System.out.println(hex.toDecimal());
+//        System.out.println(dec.toHexadecimal());
+//    }
 }
 
